@@ -18,13 +18,18 @@ type Task interface {
 type Producer struct {
 }
 
+// 使用多少个协程并行执行数据生成
+// 一个协程生成一个文件
+// 推荐300个，根据操作系统查看cpu使用率
+const ThreadNumber int = 300
+
 func (p *Producer) Exec() {
 	fmt.Println("The machines will running!")
 	fmt.Println(time.Now())
 	readAbort()
 	//	不重命名 直接生成目标文件，原因 linux文件共享，读写时候也可以重命名导致文件关闭不了，fd只增不减
 	//	go WritedAndRename()
-	for i := 0; i < 300; i++ {
+	for i := 0; i < ThreadNumber; i++ {
 		sleep := time.Duration(3000000000) //0.3
 		time.Sleep(sleep)
 		fmt.Println("The thread-" + fmt.Sprint(i) + " is running")
